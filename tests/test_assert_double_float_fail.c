@@ -40,5 +40,11 @@ int main(void) {
         cmocka_unit_test(test_assert_float_not_equal_fail),
     };
 
-    return cmocka_run_group_tests(float_tests_fail, NULL, NULL);
+    int result = cmocka_run_group_tests(float_tests_fail, NULL, NULL);
+
+    // For failing tests, we expect all tests to fail, so return 0 if that's the
+    // case
+    int expected_failures = sizeof(float_tests_fail) /
+                            sizeof(struct CMUnitTest);
+    return (result == expected_failures) ? 0 : 1;
 }

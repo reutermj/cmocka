@@ -96,5 +96,11 @@ int main(void) {
         cmocka_unit_test(test_assert_float_not_in_range_fail_3),
     };
 
-    return cmocka_run_group_tests(range_fail_tests, NULL, NULL);
+    int result = cmocka_run_group_tests(range_fail_tests, NULL, NULL);
+
+    // For failing tests, we expect all tests to fail, so return 0 if that's the
+    // case
+    int expected_failures = sizeof(range_fail_tests) /
+                            sizeof(struct CMUnitTest);
+    return (result == expected_failures) ? 0 : 1;
 }

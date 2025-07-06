@@ -43,5 +43,10 @@ int main(void)
         cmocka_unit_test(test_non_null_msg_fail),
     };
 
-    return cmocka_run_group_tests(ptr_msg_tests, NULL, NULL);
+    int result = cmocka_run_group_tests(ptr_msg_tests, NULL, NULL);
+
+    // For failing tests, we expect all tests to fail, so return 0 if that's the
+    // case
+    int expected_failures = sizeof(ptr_msg_tests) / sizeof(struct CMUnitTest);
+    return (result == expected_failures) ? 0 : 1;
 }

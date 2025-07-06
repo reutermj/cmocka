@@ -32,5 +32,10 @@ int main(void) {
         cmocka_unit_test(test_false),
     };
 
-    return cmocka_run_group_tests(tests, group_setup_failing, NULL);
+    int result = cmocka_run_group_tests(tests, group_setup_failing, NULL);
+
+    // For this test, we expect group setup to fail (result should be 1 for
+    // group setup failure)
+    int expected_result = 1;
+    return (result == expected_result) ? 0 : 1;
 }

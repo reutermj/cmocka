@@ -51,6 +51,10 @@ int main(void) {
         cmocka_unit_test_setup_teardown(int_test_ignored, setup_fail, teardown),
         cmocka_unit_test_setup_teardown(int_test_success, setup_ok, teardown),
     };
+    
+    int result = cmocka_run_group_tests(tests, NULL, NULL);
 
-    return cmocka_run_group_tests(tests, NULL, NULL);
+    // For this test, we expect 1 failure out of 2 tests (testing setup failure)
+    int expected_failures = 1;
+    return (result == expected_failures) ? 0 : 1;
 }

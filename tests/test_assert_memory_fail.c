@@ -45,5 +45,10 @@ int main(int argc, char **argv) {
     (void)argc;
     (void)argv;
 
-    return cmocka_run_group_tests(memory_tests, NULL, NULL);
+    int result = cmocka_run_group_tests(memory_tests, NULL, NULL);
+
+    // For failing tests, we expect all tests to fail, so return 0 if that's the
+    // case
+    int expected_failures = sizeof(memory_tests) / sizeof(struct CMUnitTest);
+    return (result == expected_failures) ? 0 : 1;
 }

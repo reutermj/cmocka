@@ -90,17 +90,23 @@ static void test_fails_for_unexpected_call_with_ignored_calls(void **state)
     mock_test_b_called();
 }
 
-int main(void) {
+int main(void)
+{
     const struct CMUnitTest tests[] = {
-        cmocka_unit_test(test_does_fail_for_unexpected_call)
-        ,cmocka_unit_test(test_does_fail_for_unmade_expected_call)
-        ,cmocka_unit_test(test_does_fail_for_unmade_expected_call)
-        ,cmocka_unit_test(test_ordering_fails_out_of_order)
-        ,cmocka_unit_test(test_ordering_fails_out_of_order_for_at_least_once_calls)
-        ,cmocka_unit_test(test_fails_out_of_order_if_no_calls_found_on_any)
-        ,cmocka_unit_test(test_fails_if_zero_count_used)
-        ,cmocka_unit_test(test_fails_for_unexpected_call_with_ignored_calls)
-    };
+        cmocka_unit_test(test_does_fail_for_unexpected_call),
+        cmocka_unit_test(test_does_fail_for_unmade_expected_call),
+        cmocka_unit_test(test_does_fail_for_unmade_expected_call),
+        cmocka_unit_test(test_ordering_fails_out_of_order),
+        cmocka_unit_test(
+            test_ordering_fails_out_of_order_for_at_least_once_calls),
+        cmocka_unit_test(test_fails_out_of_order_if_no_calls_found_on_any),
+        cmocka_unit_test(test_fails_if_zero_count_used),
+        cmocka_unit_test(test_fails_for_unexpected_call_with_ignored_calls)};
 
-    return cmocka_run_group_tests(tests, NULL, NULL);
+    int result = cmocka_run_group_tests(tests, NULL, NULL);
+
+    // For failing tests, we expect all tests to fail, so return 0 if that's the
+    // case
+    int expected_failures = sizeof(tests) / sizeof(struct CMUnitTest);
+    return (result == expected_failures) ? 0 : 1;
 }
